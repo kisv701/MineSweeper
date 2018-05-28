@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Platform2D</title>
+    <link rel="stylesheet"  type="text/css" href="assets/minesweeper.css">
+    <script src="js/Tile.js" type="application/javascript"></script>
+    <script src="js/MineSweeper.js" type="application/javascript"></script>
+    <script src="js/RuleBased.js" type="application/javascript"></script>
+</head>
+<body>
+<div id="container">
+    <div id="minesweeper">
+        <div id="scoreBanner">
+            <div class="bannerItem"><canvas id="bombsLeft"></canvas></div>
+            <div class="bannerItem"><canvas id="smileyFace"></canvas></div>
+                <div class="bannerItem"><canvas id="timer"></canvas></div>
+        </div>
+        <canvas id="screen" oncontextmenu="return false;"></canvas>
+    </div>
+    <div id="controlPanel">
+        <div id="selectDifficulty">Difficulty:
+            <select id="difficulty">
+                <option value="Easy" selected>Easy</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Expert">Expert</option>
+            </select>
+        </div>
+        <div id="selectAI">AI:
+            <select id="ai">
+                    <option value="rule">Rule based</option>
+                    <option value="ml" disabled>Machine learning</option>
+                    <option value="none" selected>None</option>
+            </select>
+        </div>
+        </div>
+    </div>
+
+    <div id="controlPanelAI">
+        <h3>AI History</h3>
+        <div id="historyAI"></div>
+    </div>
+</div>
+<script src="js/main.js" type="module"></script>
+</body>
+</html>
