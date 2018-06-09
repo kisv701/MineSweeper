@@ -146,5 +146,3 @@ sprites.onload = function createGame(){
     return game;
 };
 sprites.src = './assets/minesweeper_sprites.png';
-
-
