@@ -135,14 +135,14 @@ class RuleBased{
                         this.row = defaults[0][0];
                         this.col = defaults[0][1];
                         this.button = 2;
-                        console.log("Flagging... Row: " + this.row + " , Col: " + this.col);
+                        //console.log("Flagging... Row: " + this.row + " , Col: " + this.col);
                         return true;
                     } else if(adjDefaults > 0  && adjBombs == adjFlags) {
                         //If all adjacent default tiles are safe, click them.
                         this.row = defaults[0][0];
                         this.col = defaults[0][1];
                         this.button = 0;
-                        console.log("Clicking... Row: " + this.row + " , Col: " + this.col);
+                        //console.log("Clicking... Row: " + this.row + " , Col: " + this.col);
                         return true;
                     }
                 }
@@ -154,10 +154,73 @@ class RuleBased{
     }
 
     /**
-     *
-     *
+     * Generate an equation system that can be solved using rref
+     * Each row of the system contains information gained from one square, i.e adj squares.
+     * TODO: ADD equation all D's == Bombs left for end game tactic!
      */
     applyRuleTwo(){
+        let matrix = [];
+        let report = [];
+        matrix.push(Array.apply(null, Array(this.rows*this.cols+1)).map(Number.prototype.valueOf,0)); //Push initial equation all D's == Bombs left
+        matrix[0][matrix[0].length-1] = this.bombsLeft;
+        for(let r=0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                if(!(this.grid[r][c] == 'D' || this.grid[r][c] == 'F' || this.grid[r][c] == '0')){
+                    let neigh = this.getNeighbours(r,c);
+                    let adjBombs = Number(this.grid[r][c]);
+                    let adjFlags = 0;
+                    let defaults = [];
+
+                    //Counter number of adjecent flags and save potential bomb locations
+                    for(let i=0; i < neigh.length; i++){
+                        let current = this.grid[neigh[i][0]][neigh[i][1]];
+                        if(current == 'F'){
+                            adjFlags += 1;
+                        } else if(current == 'D'){
+                            defaults.push(neigh[i])
+                        }
+                    }
+                    
+                    if(adjBombs > adjFlags){
+                        //Initialize row with all zeros
+                        matrix.push(Array.apply(null, Array(this.rows*this.cols+1)).map(Number.prototype.valueOf,0));
+                        for(let i = 0; i < defaults.length; i++){
+                            //Take most recent entry (i.e associated with current hint) and sett all adjDefaults corresponding to 1.
+                            matrix[matrix.length-1][defaults[i][0]*this.cols+defaults[i][1]] = 1;
+                            report.push("" + matrix.length-1 + ": (" + (defaults[i][0]) + " , " + (defaults[i][1]) + ") => " + (defaults[i][0]*this.cols+defaults[i][1]) + " = 1");
+                        }
+                        //Grab lower right value in matrix and set it to number of bombs to find.
+                        matrix[matrix.length-1][matrix[matrix.length-1].length-1] = adjBombs - adjFlags;
+                    }
+                } else if(this.grid[r][c] == 'D'){
+                    //Add to first row, lets think a bit more about this equation...
+                    //TODO: Think a bit more about how this works out..
+                    matrix[0][r*this.cols + c] = 1;
+                }
+            }
+        }
+        if(matrix.length > 1){
+
+            rref(matrix);
+
+            let solvedRow = findSolvedRow(matrix);
+            if(solvedRow){
+                for(let index = 0; index < solvedRow.length-1; index++){
+                    if (solvedRow[index] === 1){
+                        console.log("USING RULE 2!!!!!!")
+                        this.row = (index / this.cols | 0)
+                        this.col = index % this.cols
+                        this.button = 2 * solvedRow[solvedRow.length-1];
+                        //report.forEach(item => console.log(item));
+                        //console.log("rref: ", matrix);
+                        console.log(this.row, this.col, (this.button) ? "Flag" : "Klick");
+                        //console.log(solvedRow);
+                        return true;
+
+                    }
+                };
+            }
+    }
         return false;
     }
     applyRandomGuessing() {
@@ -176,4 +239,6 @@ class RuleBased{
         this.button = 0;
         console.log("Guessing... Row: " + this.row + " , Col: " + this.col);
     }
+
+    
 }

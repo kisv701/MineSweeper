@@ -46,7 +46,6 @@ class MineSweeper {
                  }
                  let neighbours = MineSweeper.getNeighbours((i == 0), (i == this.rows-1), (j == 0), (j == this.cols-1));
 
-                 //debugger;
                  let counter = 0;
                  for(let neighbour of neighbours){
                      let dr = neighbour[0];
