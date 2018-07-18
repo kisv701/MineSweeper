@@ -29,7 +29,7 @@ sprites.onload = function createGame(){
 
     let leftButtonDown = false;
     let rightButtonDown = false;
-    let ai = undefined;
+    this.ai = undefined;
 
     let game = new MineSweeper(gameCanvas, setting, timeCanvas, bombCanvas, smileyCanvas);
     game.setSprites(sprites);
@@ -130,10 +130,11 @@ sprites.onload = function createGame(){
 
         if (selectedAI == 'none'){
             aiControlPanel.style.display = "none";
+            window.ai = undefined;
         } else {
             aiControlPanel.style.display = "block";
             if(selectedAI == 'rule') {
-                ai = new RuleBased();
+                window.ai = new RuleBased();
                 aiHistoryOutput.innerHTML = "RuleBased AI: ";
             }
             

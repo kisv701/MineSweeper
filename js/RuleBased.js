@@ -10,9 +10,35 @@ class RuleBased{
         this.col = 0;
         this.button = 0;
 
-        setInterval(() => {
+        let interval = setInterval(() => {
+
+            if(!window.ai) clearInterval(interval);
+
             this.makeMove();
-        }, 100);
+            if(window.game){
+                if(window.game.gameOver){
+                    window.game.restartGame();
+                } else {
+                    if(window.game.exportData){
+                        if(Math.random() > 0.7){
+                            let board = window.game.exportGameState();
+                            let target = window.game.exportTargetState();
+                            let url = 'http://localhost:3333/?board=' + board + '&target=' + target;
+                            let xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                              if (this.readyState == 4 && this.status == 200) {
+                                console.log('Server: ', this.responseText);
+                              }
+                            };
+                            xhttp.open('GET', url, true);
+                            xhttp.send();
+                            console.log('Sening..');
+                        }
+                    }
+
+                }
+            }
+        }, 20);
 
     }
 
@@ -207,13 +233,13 @@ class RuleBased{
             if(solvedRow){
                 for(let index = 0; index < solvedRow.length-1; index++){
                     if (solvedRow[index] === 1){
-                        console.log("USING RULE 2!!!!!!")
+                        //console.log("USING RULE 2!!!!!!")
                         this.row = (index / this.cols | 0)
                         this.col = index % this.cols
-                        this.button = 2 * solvedRow[solvedRow.length-1];
+                        this.button = 2 * Math.sign(solvedRow[solvedRow.length-1]);
                         //report.forEach(item => console.log(item));
                         //console.log("rref: ", matrix);
-                        console.log(this.row, this.col, (this.button) ? "Flag" : "Klick");
+                        //console.log(this.row, this.col, (this.button) ? "Flag" : "Klick");
                         //console.log(solvedRow);
                         return true;
 
@@ -237,7 +263,7 @@ class RuleBased{
         this.row = coveredR[(coveredR.length * Math.random() | 0)];
         this.col = coveredC[(coveredC.length * Math.random() | 0)];
         this.button = 0;
-        console.log("Guessing... Row: " + this.row + " , Col: " + this.col);
+        //console.log("Guessing... Row: " + this.row + " , Col: " + this.col);
     }
 
     

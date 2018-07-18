@@ -45,12 +45,12 @@ function findSolvedRow(A){
         var total = A[r][columns-1];
 
         //Start off with easiest example, if we can say for sure that this is a bomb, row of style ... 0,0,1,0,0,1
-        if(total === 1){
+        if(total >= 1){
             var foundOnes = 0;
             for(var c=columns-2; c >= 0; c--){
                 if(A[r][c] === 1) foundOnes++;
             }
-            if(foundOnes === 1) return A[r];
+            if(foundOnes === total) return A[r];
         } else if(total == 0){
             //If we can say for sure that a square is safe, row of style ... 0,0,1,0,0,0
             var foundOnes = 0;

@@ -28,6 +28,8 @@ class MineSweeper {
         this.bombsLeft = this.bombCount;
         this.timeStarted = new Date().getTime();
 
+        this.exportData = false;
+
         this.restartGame();
     }
 
@@ -342,6 +344,22 @@ class MineSweeper {
          return gameString;
      }
 
+     //Returns a string describing the placement of the bombs for supervised learning.
+     exportTargetState(){
+        let targetString = '';
+        for(let r=0; r < this.rows; r++){
+            for(let c=0; c < this.cols; c++){
+                let tile = this.grid[r][c];
+                if(tile.isBomb){
+                    targetString += '1';
+                } else {
+                    targetString += '0';
+                }
+            }
+            targetString += ',';
+        }
+        return targetString.slice(0, -1);
+     }
 
      //Generates the neighbours one should iterate over to check all neighbours in the grid.
      static getNeighbours(isTop, isBottom, isLeft, isRight) {

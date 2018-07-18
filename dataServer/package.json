@@ -1,0 +1,26 @@
+{
+  "name": "dataserver",
+  "version": "1.0.0",
+  "description": "DataServer is set up to recive gamestates from Minesweeper and store them to be used as machine learning dataset to for inital training ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kisv701/MineSweeper.git"
+  },
+  "keywords": [
+    "Minesweeper",
+    "dataset",
+    "Machine",
+    "Learning"
+  ],
+  "author": "Kim Svensson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kisv701/MineSweeper/issues"
+  },
+  "homepage": "https://github.com/kisv701/MineSweeper#readme"
+}
